@@ -2,6 +2,13 @@
 
 This is the simple project to add feedbacks.
 
+**To create a project from this repository:**
+
+```
+git clone https://github.com/m-usmananwar/feedback-app.git
+
+```
+
 To start the Project
 
 ```bash
