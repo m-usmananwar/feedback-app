@@ -58,6 +58,17 @@ class AuthController extends Controller
         return response()->success($message, compact('isExists'));
     }
 
+    public function getCurrentUser(Request $request)
+    {
+        try {
+            $user = $request->user();
+
+            return response()->success("Current user", compact('user'));
+        } catch (\Exception $e) {
+            return $this->handleException($e);
+        }
+    }
+
     public function logOut(Request $request)
     {
         $request->user()->currentAccessToken()->delete();

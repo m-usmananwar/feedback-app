@@ -22,6 +22,7 @@ Route::middleware('guest')->group(function() {
 });
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logOut']);
+    Route::get('/logout', [AuthController::class, 'getCurrentUser']);
 
     Route::prefix('feedbacks')->group(function () {
         Route::post('/', [FeedbackController::class, 'store']);
