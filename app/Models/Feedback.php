@@ -50,12 +50,12 @@ class Feedback extends Model
 
     public function scopeListingInfo($query)
     {
-        return $query->with('user');
+        return $query->withCount('comments')->with('user');
     }
 
     public function scopeSingleInfo($query)
     {
-        return $query->withCount('comments')->with(['user']);
+        return $query->withCount('comments')->with('user');
     }
 }
 

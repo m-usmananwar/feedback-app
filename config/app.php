@@ -187,6 +187,6 @@ return [
     ])->toArray(),
 
     "request" => [
-        "paginationLength" => 15
+        "paginationLength" => 5
     ]
 ];
