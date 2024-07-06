@@ -3,10 +3,13 @@ namespace App\Repositories;
 
 use App\Models\User;
 use App\Contracts\UserRepositoryInterface;
+use App\GlobalTraits\FileHandler;
 use Illuminate\Support\Facades\Validator;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
+    use FileHandler;
+
     public function __construct(User $model)
     {
         parent::__construct($model);
@@ -15,6 +18,18 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function getUser($data)
     {
         $user = $this->model::where('email', $data['email'])->first();
+        return $user;
+    }
+
+    public function store($data)
+    {
+        if(!empty($data['profile'])) {
+            $folder = "users-profile";
+            $filePath = $this->uploadSingleFile($data['profile'], $folder);
+            $data['profile'] = $filePath;
+        }
+
+        $user = parent::create($data);
         return $user;
     }
 
