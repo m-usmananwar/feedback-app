@@ -37,16 +37,13 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         try{
-            $data = $request->input();
+            $data = $request->all();
             $this->repository->storeValidation($data)->validate();
 
             $user = $this->repository->store($data);
-            if(Hash::check($data['password'], $user->password)) {
-                $token = $user->createToken('api-token')->plainTextToken;
-                return response()->success("User authenticated successfully", compact("user", "token"));
-            } else {
-                return response()->error("Invalid credentials", 401);
-            }
+
+            $token = $user->createToken('api-token')->plainTextToken;
+            return response()->success("User authenticated successfully", compact("user", "token"));
         }catch(\Exception $e){
             return $this->handleException($e);
         }

@@ -14,6 +14,11 @@ class BaseRepository
 
     public function store(array $data)
     {
+        return $this->create($data);
+    }
+
+    public function create(array $data = [])
+    {
         return $this->model->create($data);
     }
 
