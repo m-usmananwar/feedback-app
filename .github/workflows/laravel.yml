@@ -37,7 +37,7 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no -i laravel-dude-updated.pem ubuntu@${{ secrets.AWS_INSTANCE_IP }} "
         cd /var/www/html/feedback-app &&
-        sudo git pull https://${{ secrets.PERSONAL_ACCESS_TOKEN }}:x-oauth-basic@github.com/OWNER/REPOSITORY.git &&
+        sudo git pull https://${{ secrets.PERSONAL_ACCESS_TOKEN }}:x-oauth-basic@github.com/m-usmananwar/feedback-app.git &&
         sudo php artisan down &&
         sudo composer install --no-dev &&
         sudo php artisan migrate --force &&
