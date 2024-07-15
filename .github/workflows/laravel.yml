@@ -1,40 +1,46 @@
-  name: Feedback Master Deployment
-  on:
-    push:
-      branches:
-        - master
+name: Feedback Production
 
-  jobs:
-    deploy:
-      runs-on: ubuntu-latest
+on:
+  push:
+    branches:
+      - master
 
-      steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: composer install --no-dev
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
 
-      - name: Set up AWS CLI
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+    - name: Install dependencies
+      run: composer install --no-dev
 
-      - name: Deploy to AWS EC2
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_PEM_FILE }} ubuntu@${{ secrets.AWS_INSTANCE_IP }} "
-          cd /var/www/html/feedback-app &&
-          git pull &&
-          php artisan down &&
-          composer install --no-dev &&
-          php artisan migrate --force &&
-          php artisan optimize:clear &&
-          php artisan up
-          "
+    - name: Set up AWS CLI
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+    - name: Decode PEM file
+      run: |
+        echo "${{ secrets.AWS_PEM_FILE }}" | base64 --decode > laravel-dude-updated.pem
+        chmod 400 laravel-dude-updated.pem
+
+    - name: Deploy to AWS EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no -i laravel-dude-updated.pem ubuntu@${{ secrets.AWS_INSTANCE_IP }} "
+        cd /var/www/html/feedback-app &&
+        git pull &&
+        php artisan down &&
+        composer install --no-dev &&
+        php artisan migrate --force &&
+        php artisan optimize:clear &&
+        php artisan up
+        "
