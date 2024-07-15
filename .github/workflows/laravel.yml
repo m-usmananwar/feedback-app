@@ -28,9 +28,9 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
-    - name: Decode PEM file
+    - name: Create PEM file
       run: |
-        echo "${{ secrets.AWS_PEM_FILE }}" | base64 --decode > laravel-dude-updated.pem
+        echo "${{ secrets.AWS_PEM_FILE }}" > laravel-dude-updated.pem
         chmod 400 laravel-dude-updated.pem
 
     - name: Deploy to AWS EC2
