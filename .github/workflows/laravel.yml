@@ -37,10 +37,10 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no -i laravel-dude-updated.pem ubuntu@${{ secrets.AWS_INSTANCE_IP }} "
         cd /var/www/html/feedback-app &&
-        git pull &&
-        php artisan down &&
-        composer install --no-dev &&
-        php artisan migrate --force &&
-        php artisan optimize:clear &&
-        php artisan up
+        sudo git pull &&
+        sudo php artisan down &&
+        sudo composer install --no-dev &&
+        sudo php artisan migrate --force &&
+        sudo php artisan optimize:clear &&
+        sudo php artisan up
         "
