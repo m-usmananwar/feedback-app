@@ -16,3 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return "FORBIDDEN";
 });
+Route::get('/about', function () {
+    return "Usman Anwar Here";
+});
